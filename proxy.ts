@@ -24,7 +24,7 @@ export default clerkMiddleware(async (auth, req) => {
     if (req.nextUrl.pathname === "/") {
         if (userId) {
             // User is authenticated, redirect to dashboard
-            return NextResponse.redirect(new URL("/dashboard", req.url));
+            return NextResponse.redirect(new URL("/protected", req.url));
         } else {
             // User is not authenticated, redirect to sign-in
             return NextResponse.redirect(new URL("/sign-in", req.url));
