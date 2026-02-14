@@ -39,7 +39,7 @@ export function UserInfoDialog({ user, isOpen, onClose, onUpdateName }: UserInfo
     const date = new Date(timestamp);
     const now = new Date();
     const diffInMinutes = Math.abs(now.getTime() - date.getTime()) / (1000 * 60);
-    
+
     if (diffInMinutes < 1) {
       return "Just now";
     } else if (diffInMinutes < 60) {
@@ -52,10 +52,10 @@ export function UserInfoDialog({ user, isOpen, onClose, onUpdateName }: UserInfo
       if (days < 7) {
         return `${days} day${days !== 1 ? 's' : ''} ago`;
       } else {
-        return date.toLocaleDateString([], { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
+        return date.toLocaleDateString([], {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
           day: 'numeric',
           hour: '2-digit',
           minute: '2-digit'
@@ -66,7 +66,7 @@ export function UserInfoDialog({ user, isOpen, onClose, onUpdateName }: UserInfo
 
   const handleSaveName = async () => {
     if (isUpdating) return;
-    
+
     setIsUpdating(true);
     try {
       await onUpdateName(user.id, editingName.trim());
@@ -93,12 +93,12 @@ export function UserInfoDialog({ user, isOpen, onClose, onUpdateName }: UserInfo
   return (
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
         onClick={onClose}
       >
         {/* Dialog */}
-        <div 
+        <div
           className="bg-background rounded-lg shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
         >
