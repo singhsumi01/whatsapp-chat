@@ -28,7 +28,7 @@ import {
   Download,
   Rocket,
   Star,
-  Github
+  Github,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -46,10 +46,38 @@ export default function Home() {
             <span>WaChat</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm font-medium hover:text-green-600 transition-colors">Features</a>
-            <a href="#tech-stack" className="text-sm font-medium hover:text-green-600 transition-colors">Tech Stack</a>
-            <a href="#self-hosting" className="text-sm font-medium hover:text-green-600 transition-colors">Self-Hosting</a>
-            <a href="https://github.com/hetref/whatsapp-chat" target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-green-600 transition-colors">Documentation</a>
+            <a
+              href="#features"
+              className="text-sm font-medium hover:text-green-600 transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#tech-stack"
+              className="text-sm font-medium hover:text-green-600 transition-colors"
+            >
+              Tech Stack
+            </a>
+            <a
+              href="#self-hosting"
+              className="text-sm font-medium hover:text-green-600 transition-colors"
+            >
+              Self-Hosting
+            </a>
+            <Link
+              href="/pricing"
+              className="text-sm font-medium hover:text-green-600 transition-colors"
+            >
+              Pricing
+            </Link>
+            <a
+              href="https://github.com/hetref/whatsapp-chat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium hover:text-green-600 transition-colors"
+            >
+              Documentation
+            </a>
           </div>
           <div className="flex items-center gap-3">
             <ThemeSwitcher />
@@ -66,7 +94,9 @@ export default function Home() {
           <div className="text-center space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800">
               <Rocket className="h-4 w-4 text-green-600" />
-              <span className="text-sm font-medium text-green-700 dark:text-green-400">Production-Ready WhatsApp Business Platform</span>
+              <span className="text-sm font-medium text-green-700 dark:text-green-400">
+                Production-Ready WhatsApp Business Platform
+              </span>
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
@@ -75,7 +105,10 @@ export default function Home() {
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-              A fully functional, production-ready WhatsApp Business platform built with Next.js 15, Clerk Auth, NeonDB, and WhatsApp Cloud API. Real-time messaging, broadcast groups, template management, and more.
+              A fully functional, production-ready WhatsApp Business platform
+              built with Next.js 15, Clerk Auth, NeonDB, and WhatsApp Cloud API.
+              Real-time messaging, broadcast groups, template management, and
+              more.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -125,18 +158,28 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="text-4xl font-bold text-green-600">15+</div>
-              <div className="text-sm text-muted-foreground mt-1">Core Features</div>
+              <div className="text-sm text-muted-foreground mt-1">
+                Core Features
+              </div>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600">100%</div>
-              <div className="text-sm text-muted-foreground mt-1">TypeScript</div>
+              <div className="text-sm text-muted-foreground mt-1">
+                TypeScript
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-purple-600">Real-time</div>
-              <div className="text-sm text-muted-foreground mt-1">WebSockets</div>
+              <div className="text-4xl font-bold text-purple-600">
+                Real-time
+              </div>
+              <div className="text-sm text-muted-foreground mt-1">
+                WebSockets
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-orange-600">Production</div>
+              <div className="text-4xl font-bold text-orange-600">
+                Production
+              </div>
               <div className="text-sm text-muted-foreground mt-1">Ready</div>
             </div>
           </div>
@@ -152,7 +195,9 @@ export default function Home() {
               Why Choose WaChat?
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              An enterprise-grade WhatsApp Business integration platform that enables businesses to manage customer conversations through a modern, intuitive web interface.
+              An enterprise-grade WhatsApp Business integration platform that
+              enables businesses to manage customer conversations through a
+              modern, intuitive web interface.
             </p>
           </div>
 
@@ -163,7 +208,8 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Production Ready</h3>
               <p className="text-muted-foreground">
-                Built for scale with enterprise-grade architecture, security, and performance optimizations out of the box.
+                Built for scale with enterprise-grade architecture, security,
+                and performance optimizations out of the box.
               </p>
             </Card>
 
@@ -171,9 +217,12 @@ export default function Home() {
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mb-4">
                 <Radio className="h-6 w-6 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Real-time Everything</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                Real-time Everything
+              </h3>
               <p className="text-muted-foreground">
-                Instant message delivery using WebSockets with sub-second latency and optimistic UI updates.
+                Instant message delivery using WebSockets with sub-second
+                latency and optimistic UI updates.
               </p>
             </Card>
 
@@ -183,7 +232,8 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Secure by Default</h3>
               <p className="text-muted-foreground">
-                Robust authentication with Clerk, encrypted storage, and secure database policies with NeonDB.
+                Robust authentication with Clerk, encrypted storage, and secure
+                database policies with NeonDB.
               </p>
             </Card>
           </div>
@@ -199,7 +249,8 @@ export default function Home() {
               Everything You Need
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              A comprehensive suite of features for professional WhatsApp messaging
+              A comprehensive suite of features for professional WhatsApp
+              messaging
             </p>
           </div>
 
@@ -216,32 +267,49 @@ export default function Home() {
                 <Card className="p-6">
                   <MessageSquare className="h-8 w-8 text-green-600 mb-3" />
                   <h3 className="font-semibold mb-2">Real-time Chat</h3>
-                  <p className="text-sm text-muted-foreground">Send and receive messages instantly with WebSocket-based real-time sync.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Send and receive messages instantly with WebSocket-based
+                    real-time sync.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <CheckCircle2 className="h-8 w-8 text-blue-600 mb-3" />
                   <h3 className="font-semibold mb-2">Read Receipts</h3>
-                  <p className="text-sm text-muted-foreground">Track message status with read/unread indicators and timestamps.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Track message status with read/unread indicators and
+                    timestamps.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <Zap className="h-8 w-8 text-yellow-600 mb-3" />
                   <h3 className="font-semibold mb-2">Optimistic UI</h3>
-                  <p className="text-sm text-muted-foreground">Instant message display before server confirmation for better UX.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Instant message display before server confirmation for
+                    better UX.
+                  </p>
                 </Card>
                 <Card className="p-6">
-                  <Badge className="h-8 w-8 flex items-center justify-center text-green-600 mb-3">99</Badge>
+                  <Badge className="h-8 w-8 flex items-center justify-center text-green-600 mb-3">
+                    99
+                  </Badge>
                   <h3 className="font-semibold mb-2">Unread Indicators</h3>
-                  <p className="text-sm text-muted-foreground">Visual badges and separators showing unread messages.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Visual badges and separators showing unread messages.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <ArrowRight className="h-8 w-8 text-purple-600 mb-3" />
                   <h3 className="font-semibold mb-2">Auto-scroll</h3>
-                  <p className="text-sm text-muted-foreground">Jump to unread messages automatically with smart scrolling.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Jump to unread messages automatically with smart scrolling.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <Users className="h-8 w-8 text-orange-600 mb-3" />
                   <h3 className="font-semibold mb-2">Contact Management</h3>
-                  <p className="text-sm text-muted-foreground">Custom names, search, and smart sorting by activity.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Custom names, search, and smart sorting by activity.
+                  </p>
                 </Card>
               </div>
             </TabsContent>
@@ -251,32 +319,48 @@ export default function Home() {
                 <Card className="p-6">
                   <Users className="h-8 w-8 text-green-600 mb-3" />
                   <h3 className="font-semibold mb-2">Broadcast Groups</h3>
-                  <p className="text-sm text-muted-foreground">Create and manage broadcast groups with custom names and descriptions.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Create and manage broadcast groups with custom names and
+                    descriptions.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <MessageCircle className="h-8 w-8 text-blue-600 mb-3" />
                   <h3 className="font-semibold mb-2">Personal Delivery</h3>
-                  <p className="text-sm text-muted-foreground">Each member receives broadcasts as individual personal messages.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Each member receives broadcasts as individual personal
+                    messages.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <BarChart3 className="h-8 w-8 text-purple-600 mb-3" />
                   <h3 className="font-semibold mb-2">Individual Tracking</h3>
-                  <p className="text-sm text-muted-foreground">Track read status and engagement per member.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Track read status and engagement per member.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <Radio className="h-8 w-8 text-orange-600 mb-3" />
                   <h3 className="font-semibold mb-2">Real-time Broadcast</h3>
-                  <p className="text-sm text-muted-foreground">Messages appear instantly in broadcast window.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Messages appear instantly in broadcast window.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <FileText className="h-8 w-8 text-red-600 mb-3" />
                   <h3 className="font-semibold mb-2">Template Broadcasts</h3>
-                  <p className="text-sm text-muted-foreground">Send template messages to entire groups efficiently.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Send template messages to entire groups efficiently.
+                  </p>
                 </Card>
                 <Card className="p-6">
-                  <Badge className="h-8 w-8 flex items-center justify-center text-green-600 mb-3">∞</Badge>
+                  <Badge className="h-8 w-8 flex items-center justify-center text-green-600 mb-3">
+                    ∞
+                  </Badge>
                   <h3 className="font-semibold mb-2">Unlimited Members</h3>
-                  <p className="text-sm text-muted-foreground">Add unlimited contacts to your broadcast groups.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Add unlimited contacts to your broadcast groups.
+                  </p>
                 </Card>
               </div>
             </TabsContent>
@@ -286,32 +370,45 @@ export default function Home() {
                 <Card className="p-6">
                   <FileText className="h-8 w-8 text-green-600 mb-3" />
                   <h3 className="font-semibold mb-2">Visual Builder</h3>
-                  <p className="text-sm text-muted-foreground">Create templates with real-time preview and validation.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Create templates with real-time preview and validation.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <Globe className="h-8 w-8 text-blue-600 mb-3" />
                   <h3 className="font-semibold mb-2">Multi-language</h3>
-                  <p className="text-sm text-muted-foreground">Support for 14+ languages including English, Spanish, Arabic, Hindi, and more.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Support for 14+ languages including English, Spanish,
+                    Arabic, Hindi, and more.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <Code2 className="h-8 w-8 text-purple-600 mb-3" />
                   <h3 className="font-semibold mb-2">Dynamic Variables</h3>
-                  <p className="text-sm text-muted-foreground">Use {`{{1}}`}, {`{{2}}`} for personalized content.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Use {`{{1}}`}, {`{{2}}`} for personalized content.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <CheckCircle2 className="h-8 w-8 text-green-600 mb-3" />
                   <h3 className="font-semibold mb-2">Status Tracking</h3>
-                  <p className="text-sm text-muted-foreground">Monitor approval status (Pending, Approved, Rejected).</p>
+                  <p className="text-sm text-muted-foreground">
+                    Monitor approval status (Pending, Approved, Rejected).
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <MessageSquare className="h-8 w-8 text-orange-600 mb-3" />
                   <h3 className="font-semibold mb-2">Button Types</h3>
-                  <p className="text-sm text-muted-foreground">Quick Reply, URL, Phone Number, and Catalog buttons.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Quick Reply, URL, Phone Number, and Catalog buttons.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <ImageIcon className="h-8 w-8 text-red-600 mb-3" />
                   <h3 className="font-semibold mb-2">Media Headers</h3>
-                  <p className="text-sm text-muted-foreground">Add image, video, or document headers to templates.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Add image, video, or document headers to templates.
+                  </p>
                 </Card>
               </div>
             </TabsContent>
@@ -321,32 +418,44 @@ export default function Home() {
                 <Card className="p-6">
                   <ImageIcon className="h-8 w-8 text-green-600 mb-3" />
                   <h3 className="font-semibold mb-2">Image Messages</h3>
-                  <p className="text-sm text-muted-foreground">JPG, PNG, WebP, GIF support with captions and previews.</p>
+                  <p className="text-sm text-muted-foreground">
+                    JPG, PNG, WebP, GIF support with captions and previews.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <Video className="h-8 w-8 text-blue-600 mb-3" />
                   <h3 className="font-semibold mb-2">Video Messages</h3>
-                  <p className="text-sm text-muted-foreground">MP4, MOV, AVI with native HTML5 player.</p>
+                  <p className="text-sm text-muted-foreground">
+                    MP4, MOV, AVI with native HTML5 player.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <Headphones className="h-8 w-8 text-purple-600 mb-3" />
                   <h3 className="font-semibold mb-2">Audio Messages</h3>
-                  <p className="text-sm text-muted-foreground">MP3, AAC, voice messages with waveform display.</p>
+                  <p className="text-sm text-muted-foreground">
+                    MP3, AAC, voice messages with waveform display.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <FileText className="h-8 w-8 text-orange-600 mb-3" />
                   <h3 className="font-semibold mb-2">Documents</h3>
-                  <p className="text-sm text-muted-foreground">PDF, DOC, XLS, PPT with download support.</p>
+                  <p className="text-sm text-muted-foreground">
+                    PDF, DOC, XLS, PPT with download support.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <Upload className="h-8 w-8 text-green-600 mb-3" />
                   <h3 className="font-semibold mb-2">Drag & Drop</h3>
-                  <p className="text-sm text-muted-foreground">Intuitive file upload with multi-file selection.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Intuitive file upload with multi-file selection.
+                  </p>
                 </Card>
                 <Card className="p-6">
                   <Download className="h-8 w-8 text-blue-600 mb-3" />
                   <h3 className="font-semibold mb-2">Download Manager</h3>
-                  <p className="text-sm text-muted-foreground">Efficient file downloads with progress tracking.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Efficient file downloads with progress tracking.
+                  </p>
                 </Card>
               </div>
             </TabsContent>
@@ -363,7 +472,8 @@ export default function Home() {
               Built with Modern Technologies
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Powered by the best tools and frameworks for performance, scalability, and developer experience
+              Powered by the best tools and frameworks for performance,
+              scalability, and developer experience
             </p>
           </div>
 
@@ -378,35 +488,45 @@ export default function Home() {
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">Next.js 15</div>
-                    <div className="text-sm text-muted-foreground">App Router, Server Components, API Routes</div>
+                    <div className="text-sm text-muted-foreground">
+                      App Router, Server Components, API Routes
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">React 19</div>
-                    <div className="text-sm text-muted-foreground">Modern hooks, Suspense, Server Actions</div>
+                    <div className="text-sm text-muted-foreground">
+                      Modern hooks, Suspense, Server Actions
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">TypeScript 5</div>
-                    <div className="text-sm text-muted-foreground">Type safety, better DX, fewer bugs</div>
+                    <div className="text-sm text-muted-foreground">
+                      Type safety, better DX, fewer bugs
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">Tailwind CSS</div>
-                    <div className="text-sm text-muted-foreground">Utility-first styling, responsive design</div>
+                    <div className="text-sm text-muted-foreground">
+                      Utility-first styling, responsive design
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">Shadcn/ui</div>
-                    <div className="text-sm text-muted-foreground">Beautiful, accessible components</div>
+                    <div className="text-sm text-muted-foreground">
+                      Beautiful, accessible components
+                    </div>
                   </div>
                 </div>
               </div>
@@ -422,35 +542,45 @@ export default function Home() {
                   <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">NeonDB</div>
-                    <div className="text-sm text-muted-foreground">Serverless PostgreSQL database with branching</div>
+                    <div className="text-sm text-muted-foreground">
+                      Serverless PostgreSQL database with branching
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">Clerk Auth</div>
-                    <div className="text-sm text-muted-foreground">Complete authentication solution with webhooks</div>
+                    <div className="text-sm text-muted-foreground">
+                      Complete authentication solution with webhooks
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">WhatsApp Cloud API</div>
-                    <div className="text-sm text-muted-foreground">Meta&apos;s official WhatsApp Business API</div>
+                    <div className="text-sm text-muted-foreground">
+                      Meta&apos;s official WhatsApp Business API
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">AWS S3</div>
-                    <div className="text-sm text-muted-foreground">Scalable media storage with pre-signed URLs</div>
+                    <div className="text-sm text-muted-foreground">
+                      Scalable media storage with pre-signed URLs
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">Prisma ORM</div>
-                    <div className="text-sm text-muted-foreground">Type-safe database access and migrations</div>
+                    <div className="text-sm text-muted-foreground">
+                      Type-safe database access and migrations
+                    </div>
                   </div>
                 </div>
               </div>
@@ -461,17 +591,23 @@ export default function Home() {
             <Card className="p-6 text-center">
               <Radio className="h-12 w-12 text-green-600 mx-auto mb-4" />
               <h3 className="font-semibold mb-2">Real-time</h3>
-              <p className="text-sm text-muted-foreground">WebSocket connections for instant updates</p>
+              <p className="text-sm text-muted-foreground">
+                WebSocket connections for instant updates
+              </p>
             </Card>
             <Card className="p-6 text-center">
               <Lock className="h-12 w-12 text-blue-600 mx-auto mb-4" />
               <h3 className="font-semibold mb-2">Secure</h3>
-              <p className="text-sm text-muted-foreground">Authentication, encryption, RLS policies</p>
+              <p className="text-sm text-muted-foreground">
+                Authentication, encryption, RLS policies
+              </p>
             </Card>
             <Card className="p-6 text-center">
               <Zap className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
               <h3 className="font-semibold mb-2">Optimized</h3>
-              <p className="text-sm text-muted-foreground">Strategic indexes, caching, code splitting</p>
+              <p className="text-sm text-muted-foreground">
+                Strategic indexes, caching, code splitting
+              </p>
             </Card>
           </div>
         </div>
@@ -495,7 +631,9 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-6">Quick Setup</h3>
               <div className="space-y-4">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">
+                    1
+                  </div>
                   <div>
                     <h4 className="font-semibold mb-1">Clone Repository</h4>
                     <code className="text-sm bg-muted px-3 py-1 rounded block">
@@ -504,7 +642,9 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">
+                    2
+                  </div>
                   <div>
                     <h4 className="font-semibold mb-1">Install Dependencies</h4>
                     <code className="text-sm bg-muted px-3 py-1 rounded block">
@@ -513,7 +653,9 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">
+                    3
+                  </div>
                   <div>
                     <h4 className="font-semibold mb-1">Setup Environment</h4>
                     <code className="text-sm bg-muted px-3 py-1 rounded block">
@@ -522,9 +664,13 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">
+                    4
+                  </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Run Development Server</h4>
+                    <h4 className="font-semibold mb-1">
+                      Run Development Server
+                    </h4>
                     <code className="text-sm bg-muted px-3 py-1 rounded block">
                       npm run dev
                     </code>
@@ -541,7 +687,9 @@ export default function Home() {
                     <Code2 className="h-5 w-5 text-green-600" />
                     <div>
                       <div className="font-semibold">Node.js 18+</div>
-                      <div className="text-sm text-muted-foreground">JavaScript runtime</div>
+                      <div className="text-sm text-muted-foreground">
+                        JavaScript runtime
+                      </div>
                     </div>
                   </div>
                 </Card>
@@ -550,7 +698,9 @@ export default function Home() {
                     <Database className="h-5 w-5 text-blue-600" />
                     <div>
                       <div className="font-semibold">NeonDB Account</div>
-                      <div className="text-sm text-muted-foreground">Serverless PostgreSQL database</div>
+                      <div className="text-sm text-muted-foreground">
+                        Serverless PostgreSQL database
+                      </div>
                     </div>
                   </div>
                 </Card>
@@ -559,7 +709,9 @@ export default function Home() {
                     <Lock className="h-5 w-5 text-purple-600" />
                     <div>
                       <div className="font-semibold">Clerk Account</div>
-                      <div className="text-sm text-muted-foreground">Authentication and user management</div>
+                      <div className="text-sm text-muted-foreground">
+                        Authentication and user management
+                      </div>
                     </div>
                   </div>
                 </Card>
@@ -568,7 +720,9 @@ export default function Home() {
                     <MessageCircle className="h-5 w-5 text-green-600" />
                     <div>
                       <div className="font-semibold">Meta Business Account</div>
-                      <div className="text-sm text-muted-foreground">WhatsApp Business API access</div>
+                      <div className="text-sm text-muted-foreground">
+                        WhatsApp Business API access
+                      </div>
                     </div>
                   </div>
                 </Card>
@@ -577,7 +731,9 @@ export default function Home() {
                     <Cloud className="h-5 w-5 text-orange-600" />
                     <div>
                       <div className="font-semibold">AWS Account</div>
-                      <div className="text-sm text-muted-foreground">S3 storage for media files</div>
+                      <div className="text-sm text-muted-foreground">
+                        S3 storage for media files
+                      </div>
                     </div>
                   </div>
                 </Card>
@@ -589,9 +745,13 @@ export default function Home() {
             <div className="flex items-start gap-4">
               <FileText className="h-8 w-8 text-green-600 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="text-xl font-bold mb-2">Complete Documentation</h3>
+                <h3 className="text-xl font-bold mb-2">
+                  Complete Documentation
+                </h3>
                 <p className="text-muted-foreground mb-4">
-                  Detailed setup guide with database migrations, environment variables, WhatsApp API configuration, and deployment instructions available in the README.
+                  Detailed setup guide with database migrations, environment
+                  variables, WhatsApp API configuration, and deployment
+                  instructions available in the README.
                 </p>
                 <Link
                   href="https://github.com/hetref/whatsapp-chat#readme"
@@ -627,23 +787,33 @@ export default function Home() {
               <div className="space-y-3">
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">Database-level security policies for data isolation</span>
+                  <span className="text-muted-foreground">
+                    Database-level security policies for data isolation
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">Clerk Auth with secure JWT session management</span>
+                  <span className="text-muted-foreground">
+                    Clerk Auth with secure JWT session management
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">Input validation and XSS prevention</span>
+                  <span className="text-muted-foreground">
+                    Input validation and XSS prevention
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">Encrypted storage with AWS S3</span>
+                  <span className="text-muted-foreground">
+                    Encrypted storage with AWS S3
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">HTTPS-only with secure pre-signed URLs</span>
+                  <span className="text-muted-foreground">
+                    HTTPS-only with secure pre-signed URLs
+                  </span>
                 </div>
               </div>
             </Card>
@@ -656,23 +826,33 @@ export default function Home() {
               <div className="space-y-3">
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">Strategic database indexes for fast queries</span>
+                  <span className="text-muted-foreground">
+                    Strategic database indexes for fast queries
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">Smart caching and lazy loading for media</span>
+                  <span className="text-muted-foreground">
+                    Smart caching and lazy loading for media
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">Optimistic UI updates for instant feedback</span>
+                  <span className="text-muted-foreground">
+                    Optimistic UI updates for instant feedback
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">Code splitting and dynamic imports</span>
+                  <span className="text-muted-foreground">
+                    Code splitting and dynamic imports
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">WebSocket connections for real-time sync</span>
+                  <span className="text-muted-foreground">
+                    WebSocket connections for real-time sync
+                  </span>
                 </div>
               </div>
             </Card>
@@ -687,7 +867,8 @@ export default function Home() {
             Ready to Get Started?
           </h2>
           <p className="text-xl text-green-50">
-            Deploy your own WhatsApp Business platform in minutes. Star the project on GitHub and join the community!
+            Deploy your own WhatsApp Business platform in minutes. Star the
+            project on GitHub and join the community!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
@@ -720,17 +901,46 @@ export default function Home() {
                 <span>WaChat</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Enterprise WhatsApp Business integration platform built with Next.js, Clerk Auth, and NeonDB.
+                Enterprise WhatsApp Business integration platform built with
+                Next.js, Clerk Auth, and NeonDB.
               </p>
             </div>
 
             <div>
               <h3 className="font-semibold mb-4">Product</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#features" className="hover:text-foreground transition-colors">Features</a></li>
-                <li><a href="#tech-stack" className="hover:text-foreground transition-colors">Tech Stack</a></li>
-                <li><a href="#self-hosting" className="hover:text-foreground transition-colors">Self-Hosting</a></li>
-                <li><a href="/protected" className="hover:text-foreground transition-colors">Get Started</a></li>
+                <li>
+                  <a
+                    href="#features"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#tech-stack"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Tech Stack
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#self-hosting"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Self-Hosting
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/protected"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Get Started
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -738,17 +948,32 @@ export default function Home() {
               <h3 className="font-semibold mb-4">Resources</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="https://github.com/hetref/whatsapp-chat" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  <a
+                    href="https://github.com/hetref/whatsapp-chat"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
                     Documentation
                   </a>
                 </li>
                 <li>
-                  <a href="https://github.com/hetref/whatsapp-chat#readme" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  <a
+                    href="https://github.com/hetref/whatsapp-chat#readme"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
                     Setup Guide
                   </a>
                 </li>
                 <li>
-                  <a href="https://github.com/hetref/whatsapp-chat/issues" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  <a
+                    href="https://github.com/hetref/whatsapp-chat/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
                     Support
                   </a>
                 </li>
@@ -759,17 +984,32 @@ export default function Home() {
               <h3 className="font-semibold mb-4">Community</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="https://github.com/hetref/whatsapp-chat" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  <a
+                    href="https://github.com/hetref/whatsapp-chat"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
                     GitHub
                   </a>
                 </li>
                 <li>
-                  <a href="https://github.com/hetref/whatsapp-chat/issues" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  <a
+                    href="https://github.com/hetref/whatsapp-chat/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
                     Issues
                   </a>
                 </li>
                 <li>
-                  <a href="https://github.com/hetref/whatsapp-chat/discussions" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  <a
+                    href="https://github.com/hetref/whatsapp-chat/discussions"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
                     Discussions
                   </a>
                 </li>
@@ -782,15 +1022,30 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>
               © 2025 WaChat. Built with ❤️ using{" "}
-              <a href="https://nextjs.org" target="_blank" className="font-semibold hover:underline" rel="noreferrer">
+              <a
+                href="https://nextjs.org"
+                target="_blank"
+                className="font-semibold hover:underline"
+                rel="noreferrer"
+              >
                 Next.js
-              </a>
-              {" "},{" "}
-              <a href="https://clerk.com" target="_blank" className="font-semibold hover:underline" rel="noreferrer">
+              </a>{" "}
+              ,{" "}
+              <a
+                href="https://clerk.com"
+                target="_blank"
+                className="font-semibold hover:underline"
+                rel="noreferrer"
+              >
                 Clerk
-              </a>
-              {" "}and{" "}
-              <a href="https://neon.tech" target="_blank" className="font-semibold hover:underline" rel="noreferrer">
+              </a>{" "}
+              and{" "}
+              <a
+                href="https://neon.tech"
+                target="_blank"
+                className="font-semibold hover:underline"
+                rel="noreferrer"
+              >
                 NeonDB
               </a>
             </p>

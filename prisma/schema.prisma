@@ -17,6 +17,7 @@ datasource db {
 /// These are the actual users of your application.
 model User {
   id        String   @id @db.Text // Clerk user ID (e.g., "user_...")
+  isActive  Boolean  @default(true) @map("is_active") // Account active status (for SaaS)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -26,6 +27,11 @@ model User {
   groups   ChatGroup[] // Broadcast groups owned by this user
   settings UserSettings? // WhatsApp API settings for this user
   apiKeys  ApiKey[] // API keys for this user
+  
+  // SaaS Relations
+  subscription Subscription? // User's subscription (null until first payment)
+  payments     Payment[] // Payment history
+  usageRecords UsageRecord[] // Usage analytics
 
   @@map("users")
 }
@@ -159,4 +165,120 @@ model ApiKey {
   @@index([key], name: "idx_api_keys_key")
   @@index([isActive], name: "idx_api_keys_is_active")
   @@map("api_keys")
+}
+
+/// Subscription plan - Single ₹500/month premium plan
+model SubscriptionPlan {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique // "PREMIUM"
+  displayName String   @map("display_name")
+  description String?
+  price       Decimal  @db.Decimal(10, 2) // ₹500
+  currency    String   @default("INR")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  subscriptions Subscription[]
+
+  @@map("subscription_plans")
+}
+
+/// User subscription
+model Subscription {
+  id                     String             @id @default(uuid()) @db.Uuid
+  userId                 String             @unique @map("user_id") @db.Text
+  planId                 String             @map("plan_id") @db.Uuid
+  status                 SubscriptionStatus @default(INACTIVE)
+  startDate              DateTime?          @map("start_date") // When first payment made
+  currentPeriodStart     DateTime?          @map("current_period_start")
+  currentPeriodEnd       DateTime?          @map("current_period_end")
+  cancelledAt            DateTime?          @map("cancelled_at")
+  razorpaySubscriptionId String?            @unique @map("razorpay_subscription_id")
+  razorpayCustomerId     String?            @map("razorpay_customer_id")
+  autoRenew              Boolean            @default(true) @map("auto_renew")
+  createdAt              DateTime           @default(now()) @map("created_at")
+  updatedAt              DateTime           @updatedAt @map("updated_at")
+
+  // Relations
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan         SubscriptionPlan @relation(fields: [planId], references: [id])
+  payments     Payment[]
+  usageRecords UsageRecord[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([currentPeriodEnd])
+  @@map("subscriptions")
+}
+
+enum SubscriptionStatus {
+  INACTIVE  // Not paid yet
+  ACTIVE    // Paid and active
+  PAST_DUE  // Payment failed
+  CANCELLED // User cancelled
+  EXPIRED   // Subscription ended
+}
+
+/// Payment records
+model Payment {
+  id                 String        @id @default(uuid()) @db.Uuid
+  subscriptionId     String        @map("subscription_id") @db.Uuid
+  userId             String        @map("user_id") @db.Text
+  amount             Decimal       @db.Decimal(10, 2)
+  currency           String        @default("INR")
+  status             PaymentStatus @default(PENDING)
+  razorpayPaymentId  String?       @unique @map("razorpay_payment_id")
+  razorpayOrderId    String?       @map("razorpay_order_id")
+  razorpaySignature  String?       @map("razorpay_signature") @db.Text
+  paymentMethod      String?       @map("payment_method") // card, netbanking, upi, etc.
+  billingPeriodStart DateTime      @map("billing_period_start")
+  billingPeriodEnd   DateTime      @map("billing_period_end")
+  failureReason      String?       @map("failure_reason")
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([subscriptionId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
+/// Usage tracking records (optional analytics)
+model UsageRecord {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @map("user_id") @db.Text
+  subscriptionId String   @map("subscription_id") @db.Uuid
+  messagesCount  Int      @default(0) @map("messages_count")
+  contactsCount  Int      @default(0) @map("contacts_count")
+  apiCallsCount  Int      @default(0) @map("api_calls_count")
+  mediaStorageMB Int      @default(0) @map("media_storage_mb")
+  periodStart    DateTime @map("period_start")
+  periodEnd      DateTime @map("period_end")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, periodStart])
+  @@index([userId])
+  @@index([subscriptionId])
+  @@index([periodStart])
+  @@map("usage_records")
 }

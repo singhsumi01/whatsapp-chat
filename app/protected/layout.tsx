@@ -14,42 +14,54 @@ import {
   ChevronRight,
   Home,
   Book,
-  LogOut
+  LogOut,
+  CreditCard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import {
+  SubscriptionGuard,
+  useSubscriptionStatus,
+} from "@/components/subscription-guard";
 
 const navItems = [
   {
     name: "Chat",
     path: "/protected",
     icon: MessageCircle,
-    description: "Messages & conversations"
+    description: "Messages & conversations",
   },
   {
     name: "Bulk Sender",
     path: "/protected/bulk-sender",
     icon: MessageCircle,
-    description: "Send bulk messages"
+    description: "Send bulk messages",
   },
   {
     name: "Templates",
     path: "/protected/templates",
     icon: FileText,
-    description: "Manage templates"
+    description: "Manage templates",
   },
   {
     name: "Settings",
     path: "/protected/settings",
     icon: Settings,
-    description: "API keys & config"
+    description: "API keys & config",
+  },
+  {
+    name: "Billing",
+    path: "/protected/settings/billing",
+    icon: CreditCard,
+    description: "Subscription & payments",
   },
   {
     name: "Setup",
     path: "/protected/setup",
     icon: Book,
-    description: "Initial configuration"
+    description: "Initial configuration",
   },
 ];
 
@@ -63,6 +75,8 @@ export default function ProtectedLayout({
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { isActive: hasActiveSubscription, loading: subscriptionLoading } =
+    useSubscriptionStatus();
 
   useEffect(() => {
     if (isLoaded && !userId) {
@@ -95,17 +109,18 @@ export default function ProtectedLayout({
       <aside
         className={cn(
           "relative flex flex-col border-r bg-background transition-all duration-300 ease-in-out",
-          sidebarCollapsed ? "w-16" : "w-64"
+          sidebarCollapsed ? "w-16" : "w-64",
         )}
       >
         {/* Logo/Header */}
         <div className="flex h-16 items-center border-b px-4">
           {!sidebarCollapsed ? (
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg">
+            <Link
+              href="/"
+              className="flex items-center gap-2 font-bold text-lg"
+            >
               <MessageCircle className="h-6 w-6 text-primary" />
-              <span className="text-primary">
-                WaChat
-              </span>
+              <span className="text-primary">WaChat</span>
             </Link>
           ) : (
             <MessageCircle className="h-6 w-6 text-primary mx-auto" />
@@ -121,15 +136,22 @@ export default function ProtectedLayout({
                 className={cn(
                   "w-full justify-start gap-3 transition-all py-[30px]",
                   sidebarCollapsed && "justify-center py-0",
-                  isActive(item.path) && "shadow-sm"
+                  isActive(item.path) && "shadow-sm",
                 )}
                 title={sidebarCollapsed ? item.name : undefined}
               >
-                <item.icon className={cn("h-5 w-5", sidebarCollapsed ? "" : "flex-shrink-0")} />
+                <item.icon
+                  className={cn(
+                    "h-5 w-5",
+                    sidebarCollapsed ? "" : "flex-shrink-0",
+                  )}
+                />
                 {!sidebarCollapsed && (
                   <div className="flex flex-col items-start flex-1">
                     <span className="font-medium">{item.name}</span>
-                    <span className="text-xs opacity-70">{item.description}</span>
+                    <span className="text-xs opacity-70">
+                      {item.description}
+                    </span>
                   </div>
                 )}
               </Button>
@@ -141,21 +163,30 @@ export default function ProtectedLayout({
 
         {/* User Section */}
         <div className="p-4 border-t">
-          <div className={cn(
-            "flex items-center gap-3",
-            sidebarCollapsed && "justify-center"
-          )}>
+          <div
+            className={cn(
+              "flex items-center gap-3",
+              sidebarCollapsed && "justify-center",
+            )}
+          >
             <UserButton
               appearance={{
                 elements: {
-                  avatarBox: "h-9 w-9"
-                }
+                  avatarBox: "h-9 w-9",
+                },
               }}
             />
             {!sidebarCollapsed && (
               <div className="flex flex-col flex-1 min-w-0">
                 <span className="text-sm font-medium truncate">Account</span>
-                <span className="text-xs text-muted-foreground">Manage profile</span>
+                {!subscriptionLoading && (
+                  <Badge
+                    variant={hasActiveSubscription ? "default" : "secondary"}
+                    className="w-fit text-xs mt-1"
+                  >
+                    {hasActiveSubscription ? "Premium" : "Inactive"}
+                  </Badge>
+                )}
               </div>
             )}
           </div>
@@ -192,7 +223,7 @@ export default function ProtectedLayout({
 
       {/* Main Content */}
       <main className="flex-1 overflow-hidden">
-        {children}
+        <SubscriptionGuard>{children}</SubscriptionGuard>
       </main>
     </div>
   );
