@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X, Search, Send, Loader2, AlertCircle, FileText, Eye } from "lucide-react";
+import { X, Search, Send, Loader2, AlertCircle, FileText, Eye, ImageIcon } from "lucide-react";
+import { MediaPickerDialog } from "@/components/media-picker-dialog";
 
 // Template types
 interface TemplateComponent {
@@ -84,6 +85,7 @@ export function TemplateSelector({ isOpen, onClose, onSendTemplate, selectedUser
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [mediaPickerOpen, setMediaPickerOpen] = useState(false);
 
   // Fetch templates when dialog opens
   useEffect(() => {
@@ -550,38 +552,59 @@ export function TemplateSelector({ isOpen, onClose, onSendTemplate, selectedUser
                     </Button>
                   </div>
 
-                  {/* Media URL for IMAGE/VIDEO/DOCUMENT headers */}
+                  {/* Media selection for IMAGE/VIDEO/DOCUMENT headers */}
                   {(() => {
                     const headerComp = selectedTemplate.formatted_components.header;
                     const hasMediaHeader = headerComp && ['IMAGE', 'VIDEO', 'DOCUMENT'].includes(headerComp.format?.toUpperCase() || '');
 
                     if (hasMediaHeader) {
+                      const filterMap: Record<string, string> = { IMAGE: 'image', VIDEO: 'video', DOCUMENT: 'document' };
+                      const typeFilter = filterMap[headerComp.format?.toUpperCase() || ''] || undefined;
+
                       return (
                         <div className="space-y-3 mb-6">
                           <h4 className="font-medium flex items-center gap-2">
                             <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                            {headerComp.format} Header URL *
+                            {headerComp.format} Header *
                           </h4>
-                          <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                            <Label htmlFor="mediaUrl" className="text-sm font-medium">
-                              {headerComp.format === 'IMAGE' ? 'Image URL' :
-                                headerComp.format === 'VIDEO' ? 'Video URL' :
-                                  'Document URL'} *
-                            </Label>
-                            <Input
-                              id="mediaUrl"
-                              value={mediaUrl}
-                              onChange={(e) => setMediaUrl(e.target.value)}
-                              placeholder={`https://example.com/${headerComp.format?.toLowerCase()}.${headerComp.format === 'IMAGE' ? 'jpg' :
-                                  headerComp.format === 'VIDEO' ? 'mp4' :
-                                    'pdf'
-                                }`}
-                              className="mt-2"
-                            />
-                            <p className="text-xs text-muted-foreground mt-2">
-                              Provide a publicly accessible URL for the {headerComp.format?.toLowerCase()} that will be used as the template header
+                          <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 space-y-3">
+                            {mediaUrl ? (
+                              <div className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-lg p-3 border">
+                                <ImageIcon className="h-5 w-5 text-green-600 shrink-0" />
+                                <span className="text-sm truncate flex-1">{mediaUrl.split('/').pop()?.split('?')[0] || 'Selected media'}</span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setMediaUrl("")}
+                                  className="p-1 h-auto"
+                                >
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                onClick={() => setMediaPickerOpen(true)}
+                                className="w-full gap-2"
+                              >
+                                <ImageIcon className="h-4 w-4" />
+                                Choose {headerComp.format?.toLowerCase()} from Media Library
+                              </Button>
+                            )}
+                            <p className="text-xs text-muted-foreground">
+                              Select a {headerComp.format?.toLowerCase()} from your media library or upload a new one
                             </p>
                           </div>
+                          <MediaPickerDialog
+                            isOpen={mediaPickerOpen}
+                            onClose={() => setMediaPickerOpen(false)}
+                            onSelect={(media) => {
+                              setMediaUrl(media.url);
+                              setMediaPickerOpen(false);
+                            }}
+                            mediaTypeFilter={typeFilter}
+                            title={`Select ${headerComp.format?.toLowerCase()} for header`}
+                          />
                         </div>
                       );
                     }

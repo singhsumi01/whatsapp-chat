@@ -94,6 +94,10 @@ interface MediaFile {
   type: 'image' | 'document' | 'audio' | 'video';
   preview?: string;
   caption?: string;
+  /** When set, file is already on S3 — skip re-upload */
+  s3Key?: string;
+  s3MimeType?: string;
+  s3FileSize?: number;
 }
 
 interface ChatWindowProps {
@@ -353,55 +357,21 @@ export function ChatWindow({
     setSendingMedia(true);
 
     try {
-      const totalSize = mediaFiles.reduce((sum, mf) => sum + mf.file.size, 0);
+      // Separate files that are already on S3 (from library) vs new uploads
+      const libraryFiles = mediaFiles.filter(mf => mf.s3Key);
+      const newFiles = mediaFiles.filter(mf => !mf.s3Key);
 
-      // Use presigned URL flow for large payloads (>3MB), direct FormData for small ones
-      if (totalSize > 3 * 1024 * 1024) {
-        // Step 1: Get presigned upload URLs from server
-        const uploadUrlRes = await fetch('/api/send-media/upload-url', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            files: mediaFiles.map(mf => ({
-              fileName: mf.file.name,
-              fileSize: mf.file.size,
-              mimeType: mf.file.type,
-            })),
-          }),
-        });
+      // Handle library files — already on S3, send directly
+      if (libraryFiles.length > 0) {
+        const s3Files = libraryFiles.map(mf => ({
+          s3Key: mf.s3Key!,
+          mediaId: mf.id,
+          fileName: mf.file.name,
+          mimeType: mf.s3MimeType || mf.file.type,
+          fileSize: mf.s3FileSize || mf.file.size,
+          caption: mf.caption || '',
+        }));
 
-        const uploadUrlData = await uploadUrlRes.json();
-        if (!uploadUrlRes.ok) {
-          throw new Error(uploadUrlData.error || 'Failed to get upload URLs');
-        }
-
-        // Step 2: Upload each file directly to S3 via presigned PUT URL
-        const s3Files = [];
-        for (let i = 0; i < mediaFiles.length; i++) {
-          const mf = mediaFiles[i];
-          const urlInfo = uploadUrlData.uploadUrls[i];
-
-          const uploadRes = await fetch(urlInfo.uploadUrl, {
-            method: 'PUT',
-            headers: { 'Content-Type': mf.file.type },
-            body: mf.file,
-          });
-
-          if (!uploadRes.ok) {
-            throw new Error(`Failed to upload ${mf.file.name} to storage`);
-          }
-
-          s3Files.push({
-            s3Key: urlInfo.s3Key,
-            mediaId: urlInfo.mediaId,
-            fileName: mf.file.name,
-            mimeType: mf.file.type,
-            fileSize: mf.file.size,
-            caption: mf.caption || '',
-          });
-        }
-
-        // Step 3: Send message via server with S3 references
         const response = await fetch('/api/send-media', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -419,19 +389,74 @@ export function ChatWindow({
         if (result.failureCount > 0) {
           alert(`Failed to send ${result.failureCount} files. Please try again.`);
         }
-      } else {
-        // Small files: use direct FormData upload (legacy flow)
-        const formData = new FormData();
-        formData.append('to', selectedUser.phone_number);
+      }
 
-        mediaFiles.forEach((mediaFile) => {
-          formData.append('files', mediaFile.file);
-          formData.append('captions', mediaFile.caption || '');
+      // Handle new uploads — save to media library first, then send
+      if (newFiles.length > 0) {
+        // Step 1: Get presigned upload URLs from media library API (creates DB records)
+        const mediaRes = await fetch('/api/media', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            files: newFiles.map(mf => ({
+              fileName: mf.file.name,
+              fileSize: mf.file.size,
+              mimeType: mf.file.type,
+            })),
+          }),
         });
 
+        const mediaData = await mediaRes.json();
+        if (!mediaRes.ok) {
+          throw new Error(mediaData.error || 'Failed to prepare upload');
+        }
+
+        // Step 2: Upload each file directly to S3 via presigned PUT URL
+        const s3Files = [];
+        const uploadedIds: string[] = [];
+        for (let i = 0; i < newFiles.length; i++) {
+          const mf = newFiles[i];
+          const upload = mediaData.uploads[i];
+
+          const uploadRes = await fetch(upload.uploadUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': mf.file.type },
+            body: mf.file,
+          });
+
+          if (!uploadRes.ok) {
+            throw new Error(`Failed to upload ${mf.file.name} to storage`);
+          }
+
+          uploadedIds.push(upload.id);
+          s3Files.push({
+            s3Key: upload.s3Key,
+            mediaId: upload.mediaId,
+            fileName: mf.file.name,
+            mimeType: mf.file.type,
+            fileSize: mf.file.size,
+            caption: mf.caption || '',
+          });
+        }
+
+        // Step 3: Confirm storage usage
+        if (uploadedIds.length > 0) {
+          await fetch('/api/media/confirm-upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids: uploadedIds }),
+          });
+          alert(`Media saved to your library successfully!`);
+        }
+
+        // Step 4: Send message via server with S3 references
         const response = await fetch('/api/send-media', {
           method: 'POST',
-          body: formData,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: selectedUser.phone_number,
+            files: s3Files,
+          }),
         });
 
         const result = await response.json();

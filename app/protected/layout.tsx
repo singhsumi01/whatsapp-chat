@@ -20,6 +20,7 @@ import {
   Users,
   HardDrive,
   AlertTriangle,
+  ImageIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -53,10 +54,17 @@ const navItems = [
     requiresFeature: null as string | null,
   },
   {
-    name: "Settings",
+    name: "Media",
+    path: "/protected/media",
+    icon: ImageIcon,
+    description: "Media files & uploads",
+    requiresFeature: null as string | null,
+  },
+  {
+    name: "API Keys",
     path: "/protected/settings",
     icon: Settings,
-    description: "API keys & config",
+    description: "API Keys & Configs",
     requiresFeature: "apiAccess" as string | null,
   },
   {

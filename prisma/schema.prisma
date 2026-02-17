@@ -29,11 +29,12 @@ model User {
   updatedAt         DateTime @updatedAt @map("updated_at")
 
   // Relations
-  contacts Contact[] // WhatsApp contacts owned by this user
-  messages Message[] // Messages owned by this user
-  groups   ChatGroup[] // Broadcast groups owned by this user
-  settings UserSettings? // WhatsApp API settings for this user
-  apiKeys  ApiKey[] // API keys for this user
+  contacts   Contact[] // WhatsApp contacts owned by this user
+  messages   Message[] // Messages owned by this user
+  groups     ChatGroup[] // Broadcast groups owned by this user
+  settings   UserSettings? // WhatsApp API settings for this user
+  apiKeys    ApiKey[] // API keys for this user
+  mediaFiles MediaFile[] // Media files uploaded by this user
 
   // SaaS Relations
   subscription Subscription? // User's subscription (null until first payment)
@@ -276,6 +277,25 @@ enum PaymentStatus {
   CAPTURED
   FAILED
   REFUNDED
+}
+
+/// Media files uploaded to S3 by a platform user.
+/// Tracks all media for the Media Library page and reuse across chats/templates.
+model MediaFile {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Text
+  s3Key     String   @map("s3_key") // Full S3 object key
+  fileName  String   @map("file_name")
+  mimeType  String   @map("mime_type")
+  fileSize  Int      @map("file_size") // bytes
+  mediaType String   @map("media_type") // image, video, audio, document
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, mediaType], name: "idx_media_files_user_type")
+  @@index([userId, createdAt(sort: Desc)], name: "idx_media_files_user_created")
+  @@map("media_files")
 }
 
 /// Usage tracking records (optional analytics)

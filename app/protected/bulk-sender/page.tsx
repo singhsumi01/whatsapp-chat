@@ -19,8 +19,10 @@ import {
   XCircle,
   Eye,
   Plus,
-  Trash2
+  Trash2,
+  ImageIcon
 } from "lucide-react";
+import { MediaPickerDialog } from "@/components/media-picker-dialog";
 
 interface Contact {
   name: string;
@@ -98,6 +100,7 @@ export default function BulkSenderPage() {
   const [mediaUrl, setMediaUrl] = useState<string>("");
   const [mediaId, setMediaId] = useState<string>("");
   const [mediaInputType, setMediaInputType] = useState<"url" | "id">("url");
+  const [mediaPickerOpen, setMediaPickerOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   // Batch configuration
@@ -1045,7 +1048,7 @@ export default function BulkSenderPage() {
                     )}
                   </div>
 
-                  {/* Media URL Input for templates with media headers */}
+                  {/* Media selection for templates with media headers */}
                   {hasMediaHeader(selectedTemplate).hasMedia && (
                     <div className="space-y-3 border-l-4 border-blue-500 pl-4">
                       <div className="flex items-center gap-2">
@@ -1063,7 +1066,7 @@ export default function BulkSenderPage() {
                           onClick={() => setMediaInputType("url")}
                           className="flex-1"
                         >
-                          Use URL
+                          Choose from Media
                         </Button>
                         <Button
                           size="sm"
@@ -1077,23 +1080,47 @@ export default function BulkSenderPage() {
 
                       {mediaInputType === "url" ? (
                         <div className="space-y-2">
-                          <Label htmlFor="media-url" className="text-xs">
-                            Public {hasMediaHeader(selectedTemplate).format} URL (HTTPS)
-                          </Label>
-                          <Input
-                            id="media-url"
-                            type="url"
-                            value={mediaUrl}
-                            onChange={(e) => {
-                              setMediaUrl(e.target.value);
-                              setMediaId(""); // Clear media ID when URL is used
-                            }}
-                            placeholder={`https://example.com/${hasMediaHeader(selectedTemplate).format === 'IMAGE' ? 'image.jpg' : hasMediaHeader(selectedTemplate).format === 'VIDEO' ? 'video.mp4' : 'document.pdf'}`}
-                            className="mt-1"
-                          />
+                          {mediaUrl ? (
+                            <div className="flex items-center gap-3 bg-muted/50 rounded-lg p-3 border">
+                              <ImageIcon className="h-5 w-5 text-green-600 shrink-0" />
+                              <span className="text-sm truncate flex-1">{mediaUrl.split('/').pop()?.split('?')[0] || 'Selected media'}</span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setMediaUrl("")}
+                                className="p-1 h-auto"
+                              >
+                                <XCircle className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              onClick={() => setMediaPickerOpen(true)}
+                              className="w-full gap-2"
+                            >
+                              <ImageIcon className="h-4 w-4" />
+                              Choose {hasMediaHeader(selectedTemplate).format?.toLowerCase()} from Media Library
+                            </Button>
+                          )}
                           <p className="text-xs text-muted-foreground">
-                            💡 Must be publicly accessible via HTTPS
+                            Select a file from your media library or upload a new one
                           </p>
+                          <MediaPickerDialog
+                            isOpen={mediaPickerOpen}
+                            onClose={() => setMediaPickerOpen(false)}
+                            onSelect={(media) => {
+                              setMediaUrl(media.url);
+                              setMediaId("");
+                              setMediaPickerOpen(false);
+                            }}
+                            mediaTypeFilter={
+                              hasMediaHeader(selectedTemplate).format === 'IMAGE' ? 'image' :
+                                hasMediaHeader(selectedTemplate).format === 'VIDEO' ? 'video' :
+                                  hasMediaHeader(selectedTemplate).format === 'DOCUMENT' ? 'document' : undefined
+                            }
+                            title={`Select ${hasMediaHeader(selectedTemplate).format?.toLowerCase()} for header`}
+                          />
                         </div>
                       ) : (
                         <div className="space-y-2">
