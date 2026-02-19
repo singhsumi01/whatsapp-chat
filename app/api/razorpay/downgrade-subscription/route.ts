@@ -124,6 +124,15 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     console.error('Error downgrading subscription:', error);
+    if (error.code === 'UPI_PLAN_CHANGE_NOT_SUPPORTED') {
+      return NextResponse.json(
+        {
+          error: error.message,
+          code: 'UPI_PLAN_CHANGE_NOT_SUPPORTED',
+        },
+        { status: 422 }
+      );
+    }
     return NextResponse.json(
       { error: error.message || 'Failed to downgrade subscription' },
       { status: 500 }

@@ -343,56 +343,6 @@ export default function BillingPage() {
     }
   };
 
-  // Handle pause
-  const handlePause = async () => {
-    if (!confirm("Pause your subscription? You can resume anytime.")) return;
-
-    try {
-      setActionLoading("pause");
-      setActionError(null);
-      setActionSuccess(null);
-
-      const res = await fetch("/api/razorpay/pause-subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const result = await res.json();
-      if (result.error) throw new Error(result.error);
-
-      setActionSuccess(result.message);
-      refresh();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to pause subscription");
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  // Handle resume
-  const handleResume = async () => {
-    try {
-      setActionLoading("resume");
-      setActionError(null);
-      setActionSuccess(null);
-
-      const res = await fetch("/api/razorpay/resume-subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const result = await res.json();
-      if (result.error) throw new Error(result.error);
-
-      setActionSuccess(result.message);
-      refresh();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to resume subscription");
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-IN", {
@@ -656,8 +606,6 @@ export default function BillingPage() {
                             return `${planName} · Renews on ${formatDate(subscription.currentPeriodEnd ?? null)}`;
                           if (status === "ACTIVE" && !subscription.autoRenew)
                             return `${planName} · Cancels at end of period · Access until ${formatDate(subscription.currentPeriodEnd ?? null)}`;
-                          if (status === "PAUSED")
-                            return `${planName} · Your subscription is paused`;
                           if (status === "CANCELLED")
                             return `${planName} · Access until ${formatDate(subscription.currentPeriodEnd ?? null)}`;
                           return planName;
@@ -676,35 +624,20 @@ export default function BillingPage() {
                 <CardContent>
                   <div className="flex flex-wrap gap-3">
                     {status === "ACTIVE" && subscription.autoRenew && (
-                      <>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={handlePause}
-                          disabled={actionLoading !== null}
-                        >
-                          {actionLoading === "pause" ? (
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          ) : (
-                            <Pause className="h-4 w-4 mr-2" />
-                          )}
-                          Pause Subscription
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-destructive hover:text-destructive"
-                          onClick={() => handleCancel(false)}
-                          disabled={actionLoading !== null}
-                        >
-                          {actionLoading === "cancel" ? (
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          ) : (
-                            <XCircle className="h-4 w-4 mr-2" />
-                          )}
-                          Cancel Subscription
-                        </Button>
-                      </>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-destructive hover:text-destructive"
+                        onClick={() => handleCancel(false)}
+                        disabled={actionLoading !== null}
+                      >
+                        {actionLoading === "cancel" ? (
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        ) : (
+                          <XCircle className="h-4 w-4 mr-2" />
+                        )}
+                        Cancel Subscription
+                      </Button>
                     )}
 
                     {status === "ACTIVE" && !subscription.autoRenew && (
@@ -721,18 +654,9 @@ export default function BillingPage() {
 
                     {status === "PAUSED" && (
                       <>
-                        <Button
-                          size="sm"
-                          onClick={handleResume}
-                          disabled={actionLoading !== null}
-                        >
-                          {actionLoading === "resume" ? (
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          ) : (
-                            <Play className="h-4 w-4 mr-2" />
-                          )}
-                          Resume Subscription
-                        </Button>
+                        <p className="text-sm text-muted-foreground">
+                          Your subscription is currently paused by the payment provider. You may cancel it below.
+                        </p>
                         <Button
                           variant="outline"
                           size="sm"
@@ -740,7 +664,11 @@ export default function BillingPage() {
                           onClick={() => handleCancel(true)}
                           disabled={actionLoading !== null}
                         >
-                          <XCircle className="h-4 w-4 mr-2" />
+                          {actionLoading === "cancel" ? (
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          ) : (
+                            <XCircle className="h-4 w-4 mr-2" />
+                          )}
                           Cancel Subscription
                         </Button>
                       </>

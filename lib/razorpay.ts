@@ -135,44 +135,6 @@ export async function cancelRazorpaySubscription(
 }
 
 /**
- * Pause Razorpay subscription (temporarily stop billing)
- */
-export async function pauseRazorpaySubscription(subscriptionId: string) {
-  const razorpay = getRazorpayInstance();
-
-  if (!razorpay) {
-    throw new Error('Razorpay not configured');
-  }
-
-  try {
-    const subscription = await razorpay.subscriptions.pause(subscriptionId);
-    return subscription;
-  } catch (error: any) {
-    console.error('Error pausing subscription:', error);
-    throw new Error(error.error?.description || 'Failed to pause subscription');
-  }
-}
-
-/**
- * Resume a paused Razorpay subscription
- */
-export async function resumeRazorpaySubscription(subscriptionId: string) {
-  const razorpay = getRazorpayInstance();
-
-  if (!razorpay) {
-    throw new Error('Razorpay not configured');
-  }
-
-  try {
-    const subscription = await razorpay.subscriptions.resume(subscriptionId);
-    return subscription;
-  } catch (error: any) {
-    console.error('Error resuming subscription:', error);
-    throw new Error(error.error?.description || 'Failed to resume subscription');
-  }
-}
-
-/**
  * Create Razorpay order for one-time payment (kept for backwards compatibility)
  */
 export async function createRazorpayOrder(amount: number, userId: string) {
@@ -396,7 +358,14 @@ export async function updateRazorpaySubscriptionPlan(
     return subscription;
   } catch (error: any) {
     console.error('Error updating subscription plan:', error);
-    throw new Error(error.error?.description || 'Failed to update subscription plan');
+    const description: string = error.error?.description ?? '';
+    if (description.toLowerCase().includes('payment mode is upi')) {
+      throw Object.assign(
+        new Error('Your subscription was created with UPI, which does not support plan changes. Please cancel your current subscription and subscribe again on the new plan.'),
+        { code: 'UPI_PLAN_CHANGE_NOT_SUPPORTED' }
+      );
+    }
+    throw new Error(description || 'Failed to update subscription plan');
   }
 }
 

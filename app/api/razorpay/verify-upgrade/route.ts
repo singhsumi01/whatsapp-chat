@@ -150,6 +150,15 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     console.error('Error verifying upgrade:', error);
+    if ((error as any).code === 'UPI_PLAN_CHANGE_NOT_SUPPORTED') {
+      return NextResponse.json(
+        {
+          error: error.message,
+          code: 'UPI_PLAN_CHANGE_NOT_SUPPORTED',
+        },
+        { status: 422 }
+      );
+    }
     return NextResponse.json(
       { error: error.message || 'Failed to verify upgrade payment' },
       { status: 500 }
