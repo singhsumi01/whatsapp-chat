@@ -12,6 +12,7 @@ import {
   getRazorpayPlanId,
   isRazorpayConfigured,
 } from '@/lib/razorpay';
+import { getOrCreateUser } from '@/lib/user-sync';
 
 export async function POST(req: NextRequest) {
   try {
@@ -59,8 +60,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Get user from database (should exist from when they accessed the app)
-    let user = await prisma.user.findUnique({
+    // Get or create user in DB — also stores email + name from Clerk
+    await getOrCreateUser(userId);
+
+    // Re-fetch with subscription includes
+    const fullUser = await prisma.user.findUnique({
       where: { id: userId },
       include: {
         subscription: {
@@ -69,25 +73,18 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // If user doesn't exist in our DB, create them
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          id: userId,
-          isActive: false,
-        },
-        include: {
-          subscription: {
-            include: { plan: true },
-          },
-        },
-      });
+    if (!fullUser) {
+      return NextResponse.json(
+        { error: 'User not found in database' },
+        { status: 500 }
+      );
     }
 
     // Check if already has active subscription
-    if (user.subscription?.status === 'ACTIVE' && user.subscription?.razorpaySubscriptionId) {
+    const currentSub = fullUser.subscription;
+    if (currentSub?.status === 'ACTIVE' && currentSub.razorpaySubscriptionId) {
       // If autoRenew is false (cancel pending), allow re-subscribing to a new plan
-      if (user.subscription.autoRenew) {
+      if (currentSub.autoRenew) {
         return NextResponse.json(
           { error: 'You already have an active subscription. Cancel it first to switch plans.' },
           { status: 400 }
@@ -108,7 +105,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create or get Razorpay customer
-    let razorpayCustomerId = user.subscription?.razorpayCustomerId;
+    let razorpayCustomerId = fullUser.subscription?.razorpayCustomerId;
 
     if (!razorpayCustomerId) {
       const email = clerkUser.emailAddresses[0]?.emailAddress || `${userId}@wachat.app`;
@@ -119,8 +116,15 @@ export async function POST(req: NextRequest) {
       razorpayCustomerId = customer.id;
     }
 
+    if (!razorpayCustomerId) {
+      return NextResponse.json(
+        { error: 'Failed to create Razorpay customer' },
+        { status: 500 }
+      );
+    }
+
     // Create or update subscription record in database
-    let subscription = user.subscription;
+    let subscription = fullUser.subscription;
 
     if (!subscription) {
       subscription = await prisma.subscription.create({

@@ -11,6 +11,7 @@ import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import { getUserPlanInfo, formatBytes, checkSubscriptionActive } from '@/lib/plan-limits';
 import type { PlanTier } from '@/lib/plan-limits';
+import { getOrCreateUser } from '@/lib/user-sync';
 
 export async function GET(req: NextRequest) {
   try {
@@ -40,12 +41,12 @@ export async function GET(req: NextRequest) {
     });
 
     // Auto-create user if they exist in Clerk but not in our database
+    // Uses getOrCreateUser to also sync email + name from Clerk
     if (!user) {
-      user = await prisma.user.create({
-        data: {
-          id: userId,
-          isActive: false,
-        },
+      await getOrCreateUser(userId);
+      // Re-fetch with full includes after creation
+      user = await prisma.user.findUnique({
+        where: { id: userId },
         include: {
           subscription: {
             include: {
@@ -59,6 +60,7 @@ export async function GET(req: NextRequest) {
         },
       });
       console.log(`✅ Auto-created user in database: ${userId}`);
+      if (!user) throw new Error(`Failed to create user ${userId}`);
     }
 
     // If no subscription, return as free user

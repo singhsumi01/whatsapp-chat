@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import { generateApiKey, hashApiKey, maskApiKey, getPartialKey, decryptApiKey } from '@/lib/api-keys';
 import { checkFeatureAccess, checkSubscriptionActive } from '@/lib/plan-limits';
+import { getOrCreateUser } from '@/lib/user-sync';
 
 /**
  * GET - List all API keys for the authenticated user OR reveal a specific key
@@ -220,14 +221,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Check if user exists, create if not
-        await prisma.user.upsert({
-            where: { id: userId },
-            update: {},
-            create: {
-                id: userId,
-            },
-        });
+        // Ensure user exists in DB with email + name from Clerk
+        await getOrCreateUser(userId);
 
         // Generate new API key
         const { key, prefix, hashedKey, encryptedKey } = generateApiKey();

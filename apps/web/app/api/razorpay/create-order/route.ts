@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import { createRazorpayOrder, isRazorpayConfigured } from '@/lib/razorpay';
+import { getOrCreateUser } from '@/lib/user-sync';
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,8 +28,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Get or create user in database
-    let user = await prisma.user.findUnique({
+    // Get or create user in DB — also stores email + name from Clerk
+    await getOrCreateUser(userId);
+
+    // Re-fetch with subscription includes
+    const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
         subscription: {
@@ -39,19 +43,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (!user) {
-      // Create user if doesn't exist
-      user = await prisma.user.create({
-        data: { id: userId },
-        include: {
-          subscription: {
-            include: {
-              plan: true,
-            },
-          },
-        },
-      });
-    }
+    if (!user) throw new Error(`Failed to find user ${userId} after creation`);
 
     // Check if user already has an active subscription
     if (user.subscription?.status === 'ACTIVE') {

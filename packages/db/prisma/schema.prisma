@@ -17,6 +17,8 @@ datasource db {
 /// These are the actual users of your application.
 model User {
   id                String   @id @db.Text // Clerk user ID (e.g., "user_...")
+  email             String?  @map("email") // User's primary email address (synced from Clerk)
+  name              String?  @map("name") // User's full name (synced from Clerk)
   isActive          Boolean  @default(true) @map("is_active") // Account active status (for SaaS)
   storageUsedBytes  BigInt   @default(0) @map("storage_used_bytes") // S3 storage used in bytes
   planTier          PlanTier @default(FREE) @map("plan_tier") // Current plan tier

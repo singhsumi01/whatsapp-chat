@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import { randomBytes } from 'crypto';
+import { getOrCreateUser } from '@/lib/user-sync';
 
 export const runtime = 'nodejs';
 
@@ -108,13 +109,8 @@ export async function POST(request: NextRequest) {
       const webhookToken = generateWebhookToken();
       console.log('Generated webhook token for new user settings:', userId);
 
-      await prisma.user.upsert({
-        where: { id: userId },
-        update: {},
-        create: {
-          id: userId,
-        },
-      });
+      // Ensure user exists in DB with email + name from Clerk
+      await getOrCreateUser(userId);
 
       const settings = await prisma.userSettings.create({
         data: {
@@ -193,13 +189,8 @@ export async function GET() {
       console.log('Creating initial settings with webhook token for new user:', userId);
 
       try {
-        await prisma.user.upsert({
-          where: { id: userId },
-          update: {},
-          create: {
-            id: userId,
-          },
-        });
+        // Ensure user exists in DB with email + name from Clerk
+        await getOrCreateUser(userId);
 
         settings = await prisma.userSettings.create({
           data: {
